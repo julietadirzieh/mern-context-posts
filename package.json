@@ -2,12 +2,12 @@
   "name": "mern-context-crud",
   "version": "1.0.0",
   "description": "",
-  "main": "server/index.js",
+  "main": "index.js",
   "type": "module",
   "scripts": {
-    "dev": "nodemon server/index.js",
-    "build": "npm install --prefix public_html && npm run build --prefix public_html",
-    "start": "node server/index.js"  
+    "dev": "nodemon server --ignore client",
+    "build": "npm install --prefix client && npm run build --prefix client",
+    "start": "node server"  
   },
   "keywords": [],
   "author": "",
