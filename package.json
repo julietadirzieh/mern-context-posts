@@ -1,0 +1,28 @@
+{
+  "name": "mern-context-crud",
+  "version": "1.0.0",
+  "description": "",
+  "main": "server/index.js",
+  "type": "module",
+  "scripts": {
+    "dev": "nodemon server/index.js",
+    "build": "npm install --prefix public_html && npm run build --prefix public_html",
+    "start": "node server/index.js"  
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "cloudinary": "^1.37.0",
+    "dotenv": "^16.0.3",
+    "express": "^4.18.2",
+    "express-fileupload": "^1.4.0",
+    "fs-extra": "^11.1.1",
+    "http-errors": "^2.0.0",
+    "mongoose": "^7.2.1",
+    "morgan": "^1.10.0"
+  },
+  "devDependencies": {
+    "nodemon": "^2.0.22"
+  }
+}
