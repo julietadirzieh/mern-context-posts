@@ -3,10 +3,10 @@ import { getPosts, createPost, updatePost, deletePost, getPostById } from "../co
 
 const router = Router();
 
-router.get("/posts", getPosts);
-router.post("/posts", createPost);
-router.put("/posts/:id", updatePost);
-router.delete("/posts/:id", deletePost);
-router.get("/posts/:id", getPostById);
+router.get("/", getPosts);
+router.post("/", createPost);
+router.put("/:id", updatePost);
+router.delete("/:id", deletePost);
+router.get("/:id", getPostById);
 
 export default router;

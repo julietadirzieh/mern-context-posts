@@ -1,5 +1,6 @@
 import express from "express";
 import postsRoutes from "./routes/posts.routes.js";
+import usersRoutes from "./routes/users.routes.js";
 import fileUpload from "express-fileupload";
 import { dirname, join } from "path";
 import { fileURLToPath } from "url";
@@ -16,7 +17,8 @@ app.use(fileUpload({
 }))
 
 //routes
-app.use(postsRoutes)
+app.use("/posts", postsRoutes)
+app.use("/users", usersRoutes)
 
 app.use(express.static(join(__dirname, "../client/build")))
 
