@@ -1,5 +1,5 @@
 import User from "../models/User.js"
-import bcrypt from "bcryptjs";
+import bcrypt from 'bcryptjs';
 
 export const registerUser = async (req, res) => {
     try {
@@ -12,7 +12,7 @@ export const registerUser = async (req, res) => {
         } else if (!firstName || !lastName || !email || !password) {
             return res.json({ message: "Please fill the required fields!" });
         } else {
-            bcrypt.hash(password, 10, async (error, hashedPassword) => {
+            await bcrypt.hash(password, 10, async (error, hashedPassword) => {
                 if (error) {
                     return res.json({ error });
                 } else {
