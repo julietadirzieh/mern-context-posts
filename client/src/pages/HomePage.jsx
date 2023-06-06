@@ -2,7 +2,10 @@ import { usePosts } from "../context/postContext";
 import { VscEmptyWindow } from "react-icons/vsc";
 import { Link } from "react-router-dom";
 import PostCard from "../components/PostCard";
+import { authContext } from "../context/authContext";
+import { useContext } from "react";
 export function HomePage() {
+  const { logout } = useContext(authContext);
   const { posts } = usePosts();
 
   const renderPost = () => {
@@ -25,6 +28,13 @@ export function HomePage() {
 
   return (
     <div className="bg-stone-800 min-h-screen text-center w-full mx-auto pb-24">
+      <button
+        type="button"
+        onClick={logout}
+        className="mt-10 bg-gray-600 hover:bg-gray-600 text-white p-3 rounded-md text-right float-right"
+      >
+        Logout
+      </button>
       <header className="flex justify-between items-center px-12 md:px-20 py-12">
         <h1 className="text-xl md:text-2xl font-bold text-gray-300">
           Posts Counter: {posts?.length}
