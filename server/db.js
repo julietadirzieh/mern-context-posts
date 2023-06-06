@@ -1,4 +1,4 @@
-import mongoose from "mongoose";
+import mongoose from 'mongoose';
 import { MONGODB_URI } from "./config.js";
 
 export async function connectDB() {
