@@ -26,4 +26,4 @@ app.get("*", (req, res) => {
     res.sendFile(join(__dirname, "../client/dist/index.html"))
 })
 
-export default app
+export default app;
