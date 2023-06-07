@@ -20,10 +20,10 @@ app.use(fileUpload({
 app.use("/posts", postsRoutes)
 app.use("/users", usersRoutes)
 
-app.use(express.static(join(__dirname, "../client/build")))
+app.use(express.static(join(__dirname, "../client/dist")))
 
 app.get("*", (req, res) => {
-    res.sendFile(join(__dirname, "../client/build/index.html"))
+    res.sendFile(join(__dirname, "../client/dist/index.html"))
 })
 
 export default app
