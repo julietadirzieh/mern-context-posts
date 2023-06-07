@@ -1,6 +1,6 @@
 import mongoose from 'mongoose';
 import { MONGODB_URI } from "./config.js";
-console.log(MONGODB_URI, "en db")
+
 export async function connectDB() {
     try {
         const db = await mongoose.connect(MONGODB_URI)
