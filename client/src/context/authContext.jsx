@@ -1,5 +1,5 @@
 import { createContext, useState } from "react";
-import { loginUserRequest, registerUserRequest } from "../api/users";
+import { loginUserRequest, registerUserRequest, tokenAuth } from "../api/users";
 import { toast } from "react-hot-toast";
 
 export const authContext = createContext();
@@ -7,6 +7,7 @@ export const authContext = createContext();
 const AuthProvider = ({ children }) => {
   const [user, setUser] = useState(null);
   const [token, setToken] = useState(localStorage.getItem("token"));
+  const [loading, setLoading] = useState(false);
 
   const register = async (values) => {
     try {
@@ -26,9 +27,11 @@ const AuthProvider = ({ children }) => {
     try {
       const res = await loginUserRequest(values);
 
-      if (res.message === "Login successfull") {
-        toast.success("Successfull login!");
+      if (res.message === "Login succesful!") {
+        toast.success("Successful login!");
         setUser(res.user);
+        localStorage.setItem("token", res.user.token);
+        setToken(res.user.token);
         return res;
       }
       toast.error(res.message);
@@ -43,9 +46,30 @@ const AuthProvider = ({ children }) => {
     localStorage.removeItem("token");
   };
 
+  const loginWithToken = async (token) => {
+    if (!token) {
+      setLoading(false);
+      return;
+    }
+    setLoading(true);
+    const usr = await tokenAuth(token);
+    setUser(usr);
+    setLoading(false);
+  };
+
   return (
     <authContext.Provider
-      value={{ user, setUser, token, setToken, login, logout, register }}
+      value={{
+        user,
+        setUser,
+        token,
+        setToken,
+        login,
+        logout,
+        register,
+        loginWithToken,
+        loading,
+      }}
     >
       {children}
     </authContext.Provider>

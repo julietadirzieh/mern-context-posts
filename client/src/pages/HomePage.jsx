@@ -27,26 +27,30 @@ export function HomePage() {
   };
 
   return (
-    <div className="bg-stone-800 min-h-screen text-center w-full mx-auto pb-24">
-      <button
-        type="button"
-        onClick={logout}
-        className="mt-10 bg-gray-600 hover:bg-gray-600 text-white p-3 rounded-md text-right float-right"
-      >
-        Logout
-      </button>
-      <header className="flex justify-between items-center px-12 md:px-20 py-12">
-        <h1 className="text-xl md:text-2xl font-bold text-gray-300">
-          Posts Counter: {posts?.length}
-        </h1>
-        <Link
-          to="/new"
-          className="bg-white hover:bg-stone-300 text-black p-3 rounded-md"
+    <>
+      <header className="bg-stone-800 text-center py-6">
+        <button
+          type="button"
+          onClick={logout}
+          className="bg-gray-600 hover:bg-gray-600 text-white p-3 rounded-md mx-auto md:mr-20"
         >
-          Create New Post
-        </Link>
+          Logout
+        </button>
       </header>
-      {renderPost()}
-    </div>
+      <div className="bg-stone-800 min-h-screen text-center w-full mx-auto pb-12">
+        <header className="flex w-full justify-between items-center px-12 md:px-20 py-12">
+          <h1 className="text-xl md:text-2xl font-bold text-gray-300">
+            Posts Counter: {posts?.length}
+          </h1>
+          <Link
+            to="/new"
+            className="bg-white hover:bg-stone-300 text-black p-3 rounded-md text-xs md:text-base"
+          >
+            Create New Post
+          </Link>
+        </header>
+        {renderPost()}
+      </div>
+    </>
   );
 }

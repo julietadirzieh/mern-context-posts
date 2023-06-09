@@ -18,7 +18,7 @@ app.use(fileUpload({
 
 //routes
 app.use("/posts", postsRoutes)
-app.use("/users", usersRoutes)
+app.use("/auth", usersRoutes)
 
 app.use(express.static(join(__dirname, "../client/dist")))
 

@@ -3,8 +3,7 @@ import * as Yup from 'yup';
 const alphaNumericRegex = /^[a-zA-Z0-9_]+$/;
 
 const validationSchema = Yup.object().shape({
-    firstName: Yup.string().required('First Name is required'),
-    lastName: Yup.string().required('Last Name is required'),
+    username: Yup.string().required('Username is required'),
     email: Yup.string().email('Invalid email').required('Email is required'),
     password: Yup.string().required('Password is required').min(
         8,

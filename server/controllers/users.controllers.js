@@ -1,27 +1,34 @@
+import { JWT_SECRET } from "../config.js";
 import User from "../models/User.js";
-import bcrypt from 'bcrypt';
+import { signJwt } from '../utils/jwtUtil.js';
+
+import jwt from "jsonwebtoken";
 
 export const registerUser = async (req, res) => {
     try {
-        const { firstName, lastName, email, password } = req.body;
+        const { username, email, password } = req.body;
+        const user = await User.findOne({ email });
 
-        const usuario = await User.findOne({ email });
+        if (!user) {
+            const newUser = new User({ username, email });
+            const hashedPassword = await newUser.encryptPassword(password);
 
-        if (usuario) {
-            return res.json({ message: "User already exists" });
-        } else if (!firstName || !lastName || !email || !password) {
-            return res.json({ message: "Please fill the required fields!" });
-        } else {
-            await bcrypt.hash(password, 10, async (error, hashedPassword) => {
-                if (error) {
-                    return res.json({ error });
-                } else {
-                    const newUser = new User({ firstName, lastName, email, password: hashedPassword });
-                    await newUser.save();
-                    return res.json({ message: "User created", newUser });
-                }
-            });
+            if (!hashedPassword) {
+                return res.json({
+                    auth: false,
+                    message: "Not possible to register the user"
+                });
+            }
+
+            newUser.password = hashedPassword;
+            await newUser.save();
+
+            const token = signJwt(newUser);
+
+            return res.json({ auth: true, message: "User created", user: { ...newUser._doc, token } });
         }
+
+        return res.json({ message: "User already exists" });
     } catch (error) {
         return res.status(500).json({ message: error.message });
     }
@@ -31,41 +38,60 @@ export const loginUser = async (req, res) => {
     try {
         const { email, password } = req.body;
 
-        const user = await User.findOne({ email });
+        const registeredUser = await User.findOne({ email });
 
-        if (!user) {
-            return res.json({ message: "User not found" });
+        if (!registeredUser) {
+            return res.json({
+                auth: false,
+                message: "User not found"
+            })
         }
 
-        bcrypt.compare(password, user.password, (error, isMatch) => {
-            if (error) {
-                throw new Error(error);
-            }
+        const validPassword = await registeredUser.comparePassword(password, registeredUser.password);
 
-            if (!isMatch) {
-                return res.json({ message: "Incorrect password" });
-            }
+        const token = signJwt(registeredUser)
 
-            return res.json({ message: "Login successfull", user });
-        });
+        if (!validPassword) {
+            return res.json({
+                auth: false,
+                message: "Invalid user or password"
+            })
+        }
+        return res.json({ auth: true, message: "Login succesful!", user: { ...registeredUser._doc, token } });
 
     } catch (error) {
-        return res.json({ error: error.message });
+        return res.status(500).json({ message: error.message });
     }
 };
 
 
 export const getUserById = async (req, res) => {
     try {
-        const user = await User.findById(req.params.userId)
-        if (!user) return res.sendStatus(404)
-        return res.json(user)
-    } catch (error) {
-        return res.status(500).json({ message: error.message })
-    }
-}
+        const token = req.headers["authorization"]
 
-export const updateUser = async (req, res) => {
+        if (!token) {
+            return res.status(401).json({
+                auth: false,
+                message: "No token provided"
+            });
+        }
+
+        const decoded = jwt.verify(token, JWT_SECRET);
+
+        const user = await User.findById(decoded.id, { password: 0 });
+        if (!user) {
+            return res.sendStatus(404).send("No user found");
+        }
+        return res.json(user);
+    } catch (error) {
+        return res.status(500).json({ message: error.message });
+    }
+};
+
+
+
+
+/* export const updateUser = async (req, res) => {
     try {
         const updatedUser = await User.findByIdAndUpdate(req.params.userId, req.body, { new: true })
         return res.send(updatedUser)
@@ -84,3 +110,4 @@ export const deleteUser = async (req, res) => {
         return res.status(500).json({ message: error.message })
     }
 }
+ */

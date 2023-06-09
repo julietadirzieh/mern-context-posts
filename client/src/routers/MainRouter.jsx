@@ -1,4 +1,4 @@
-import { Route, Routes } from "react-router-dom";
+import { Route, Routes, Navigate } from "react-router-dom";
 import {
   HomePage,
   NotFoundPage,
@@ -7,13 +7,45 @@ import {
   RegisterPage,
 } from "../pages";
 import { PrivateRoute } from "./PrivateRouter";
+import { useContext, useEffect } from "react";
+import { authContext } from "../context/authContext";
 
 const MainRouter = () => {
+  const { user, token, loginWithToken, loading } = useContext(authContext);
+
+  useEffect(() => {
+    if (!user && token) {
+      const fetchUser = async () => {
+        await loginWithToken(token);
+      };
+      fetchUser();
+    }
+  }, [token, user, loginWithToken]);
+
+  if (loading) {
+    return <p>LOADING...</p>;
+  }
+
   return (
     <Routes>
-      <Route path="/" element={<PrivateRoute component={HomePage} />} />
-      <Route path="/login" element={<LoginPage />} />
-      <Route path="/register" element={<RegisterPage />} />
+      <Route
+        path="/"
+        element={
+          user ? (
+            <PrivateRoute component={HomePage} />
+          ) : (
+            <Navigate to="/login" />
+          )
+        }
+      />
+      <Route
+        path="/login"
+        element={user ? <Navigate to="/" /> : <LoginPage />}
+      />
+      <Route
+        path="/register"
+        element={user ? <Navigate to="/" /> : <RegisterPage />}
+      />
       <Route path="/new" element={<PostForm />} />
       <Route path="/posts/:id" element={<PostForm />} />
       <Route path="*" element={<NotFoundPage />} />

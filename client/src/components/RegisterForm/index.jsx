@@ -14,8 +14,7 @@ const RegisterForm = () => {
   const onSubmit = async (values) => {
     try {
       const body = {
-        firstName: values.firstName.toLowerCase(),
-        lastName: values.lastName.toLowerCase(),
+        username: values.username.toLowerCase(),
         email: values.email.toLowerCase(),
         password: values.password.toLowerCase(),
       };
@@ -34,8 +33,7 @@ const RegisterForm = () => {
   return (
     <Formik
       initialValues={{
-        firstName: "",
-        lastName: "",
+        username: "",
         email: "",
         password: "",
         confirmPassword: "",
@@ -49,14 +47,9 @@ const RegisterForm = () => {
           className="bg-zinc-800 text-white py-12 w-5/6 md:w-2/3 mx-auto rounded-md shadow-md shadow-black items-center h-full"
         >
           <InputForm
-            label="First Name"
-            name="firstName"
-            placeholder="First Name..."
-          />
-          <InputForm
-            label="Last Name"
-            name="lastName"
-            placeholder="Last Name..."
+            label="Username"
+            name="username"
+            placeholder="Username..."
           />
           <InputForm label="Email" name="email" placeholder="Email..." />
           <InputForm

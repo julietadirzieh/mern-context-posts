@@ -15,7 +15,7 @@ const LoginForm = () => {
     try {
       const response = await login(values);
 
-      if (response && response.message === "Login successfull") {
+      if (response && response.message === "Login succesful!") {
         navigate("/");
         return response;
       }
