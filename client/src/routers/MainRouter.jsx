@@ -9,6 +9,7 @@ import {
 import { PrivateRoute } from "./PrivateRouter";
 import { useContext, useEffect } from "react";
 import { authContext } from "../context/authContext";
+import Loading from "../components/Loading";
 
 const MainRouter = () => {
   const { user, token, loginWithToken, loading } = useContext(authContext);
@@ -23,7 +24,7 @@ const MainRouter = () => {
   }, [token, user, loginWithToken]);
 
   if (loading) {
-    return <p>LOADING...</p>;
+    return <Loading />;
   }
 
   return (
