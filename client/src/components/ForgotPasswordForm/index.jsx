@@ -1,52 +1,45 @@
 import { Form, Formik } from "formik";
-import React, { useContext } from "react";
+import React, { useContext, useState } from "react";
 import { AiOutlineLoading3Quarters } from "react-icons/ai";
 import validationSchema from "./validation";
-import { Link, useNavigate } from "react-router-dom";
-import { authContext } from "../../context/authContext";
 import { toast } from "react-hot-toast";
 import InputForm from "../InputForm";
+import { authContext } from "../../context/authContext";
+import ForgotPasswordStatus from "./ForgotPasswordStatus";
 
-const LoginForm = () => {
-  const navigate = useNavigate();
-  const { login } = useContext(authContext);
+const ForgotPasswordForm = () => {
+  const { forgotPassword } = useContext(authContext);
+  const [submitted, setSubmitted] = useState(false);
 
   const onSubmit = async (values) => {
     try {
-      const response = await login(values);
-
-      if (response && response.message === "Login succesful!") {
-        navigate("/");
+      const response = await forgotPassword(values.email);
+      if (
+        response &&
+        response.message === "Password reset token sent to your email"
+      ) {
+        setSubmitted(true);
         return response;
       }
     } catch (err) {
-      toast.error("Error login!", err.message);
+      toast.error("User not found", err.message);
     }
   };
 
-  return (
+  return submitted ? (
+    <ForgotPasswordStatus />
+  ) : (
     <div className="bg-zinc-800 text-white py-12 w-5/6 md:w-2/3 mx-auto rounded-md shadow-md shadow-black items-center h-full">
+      <h2 className="text-3xl text-white font-bold">Forgot your Password?</h2>
+
       <Formik
-        initialValues={{ email: "", password: "" }}
+        initialValues={{ email: "" }}
         validationSchema={validationSchema}
         onSubmit={onSubmit}
       >
         {({ isSubmitting, handleSubmit }) => (
           <Form onSubmit={handleSubmit}>
             <InputForm label="Email" name="email" placeholder="Email..." />
-            <InputForm
-              label="Password"
-              name="password"
-              placeholder="Password..."
-            />
-
-            <Link
-              to="/forgot-password"
-              className="flex justify-end mt-2 text-xs text-white hover:text-red-400 w-5/6 md:w-2/3 mx-auto"
-            >
-              Forgot Password?
-            </Link>
-
             <button
               type="submit"
               className="flex mt-8 bg-white text-black hover:bg-gray-600 hover:text-white border b-black hover:b-white transition duration-500 p-3 rounded-md mx-auto"
@@ -55,20 +48,14 @@ const LoginForm = () => {
               {isSubmitting ? (
                 <AiOutlineLoading3Quarters className="animate-spin h-5 w-5" />
               ) : (
-                "LOGIN"
+                "Send Email Code"
               )}
             </button>
           </Form>
         )}
       </Formik>
-      <div className="flex justify-center mt-10">
-        <h3 className="text-white">Need an account?</h3>
-        <Link to="/register" className="text-red-400 hover:text-white ml-2">
-          Sign up Here
-        </Link>
-      </div>
     </div>
   );
 };
 
-export default LoginForm;
+export default ForgotPasswordForm;

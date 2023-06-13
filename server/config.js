@@ -10,3 +10,14 @@ export const CLOUDINARY_API_KEY = process.env.CLOUDINARY_API_KEY
 export const CLOUDINARY_API_SECRET = process.env.CLOUDINARY_API_SECRET
 
 export const JWT_SECRET = process.env.JWT_SECRET
+
+export const EMAIL_JS_CONFIG = {
+    serviceId: process.env.EMAIL_SERVICE_ID,
+    templateId: process.env.EMAIL_TEMPLATE_ID,
+    userId: process.env.EMAIL_USER_ID,
+};
+
+export const EMAIL_CONFIG = {
+    user: process.env.EMAIL_USER,
+    password: process.env.EMAIL_PASSWORD
+}

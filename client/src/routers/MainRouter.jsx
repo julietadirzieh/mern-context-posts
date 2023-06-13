@@ -5,6 +5,8 @@ import {
   PostForm,
   LoginPage,
   RegisterPage,
+  ForgotPasswordPage,
+  ResetPasswordPage,
 } from "../pages";
 import { PrivateRoute } from "./PrivateRouter";
 import { useContext, useEffect } from "react";
@@ -47,6 +49,8 @@ const MainRouter = () => {
         path="/register"
         element={user ? <Navigate to="/" /> : <RegisterPage />}
       />
+      <Route path="/forgot-password" element={<ForgotPasswordPage />} />
+      <Route path="/reset-password" element={<ResetPasswordPage />} />
       <Route path="/new" element={<PostForm />} />
       <Route path="/posts/:id" element={<PostForm />} />
       <Route path="*" element={<NotFoundPage />} />

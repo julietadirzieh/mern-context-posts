@@ -1,5 +1,11 @@
 import { createContext, useState } from "react";
-import { loginUserRequest, registerUserRequest, tokenAuth } from "../api/users";
+import {
+  forgotPasswordRequest,
+  loginUserRequest,
+  registerUserRequest,
+  resetPasswordRequest,
+  tokenAuth,
+} from "../api/users";
 import { toast } from "react-hot-toast";
 
 export const authContext = createContext();
@@ -57,6 +63,36 @@ const AuthProvider = ({ children }) => {
     setLoading(false);
   };
 
+  const forgotPassword = async (values) => {
+    try {
+      const res = await forgotPasswordRequest(values);
+
+      if (res.message === "Password reset token sent to your email") {
+        toast.success("Password reset token sent to your email");
+        localStorage.setItem("token", res.user.token);
+        setToken(res.user.token);
+        return res;
+      }
+      toast.error(res.message);
+    } catch (error) {
+      throw error;
+    }
+  };
+
+  const resetPassword = async (values) => {
+    try {
+      const res = await resetPasswordRequest(values);
+
+      if (res.message === "Password reset successful") {
+        toast.success("Password reset successful");
+        return res;
+      }
+      toast.error(res.message);
+    } catch (error) {
+      throw error;
+    }
+  };
+
   return (
     <authContext.Provider
       value={{
@@ -69,6 +105,8 @@ const AuthProvider = ({ children }) => {
         register,
         loginWithToken,
         loading,
+        forgotPassword,
+        resetPassword,
       }}
     >
       {children}

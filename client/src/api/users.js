@@ -32,8 +32,23 @@ export const tokenAuth = async (token) => {
     }
 };
 
+export const forgotPasswordRequest = async (email) => {
+    try {
+        const { data } = await axios.post('/auth/forgot-password', { email });
+        return data;
+    } catch (e) {
+        return e.response.message;
+    }
+};
 
-
+export const resetPasswordRequest = async (newData) => {
+    try {
+        const { data } = await axios.post('/auth/reset-password', newData);
+        return data;
+    } catch (e) {
+        return e.response.message;
+    }
+};
 
 export const deleteUserRequest = async (id) => await axios.delete("/auth/" + id);
 
