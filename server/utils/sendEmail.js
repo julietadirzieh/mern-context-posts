@@ -15,9 +15,9 @@ export const sendPasswordResetEmail = async (email, resetLink) => {
         const mailOptions = {
             from: EMAIL_CONFIG.user,
             to: email,
-            subject: "Restablecimiento de contraseña",
+            subject: "Password Reset",
             text: "Plaintext version of the message",
-            html: `<p>Haz clic en el siguiente enlace para restablecer tu contraseña: ${resetLink}</p>`
+            html: `<p>Click on the following link to reset your password: ${resetLink}</p><p>* The link will be valid for one (1) hour.</p>`
         };
 
         await transporter.sendMail(mailOptions);
