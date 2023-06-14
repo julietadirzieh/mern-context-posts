@@ -4,7 +4,7 @@ import { EMAIL_CONFIG } from "../config.js";
 export const sendPasswordResetEmail = async (email, resetLink) => {
     try {
 
-        const transporter = nodemailer.createTransport('smtps://user%40gmail.com:pass@smtp.gmail.com', {
+        const transporter = nodemailer.createTransport({
             service: 'Gmail',
             auth: {
                 user: EMAIL_CONFIG.user,
