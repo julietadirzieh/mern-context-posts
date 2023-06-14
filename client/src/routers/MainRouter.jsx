@@ -12,6 +12,7 @@ import { PrivateRoute } from "./PrivateRouter";
 import { useContext, useEffect } from "react";
 import { authContext } from "../context/authContext";
 import Loading from "../components/Loading";
+import { ConfirmationForgotPasswordPage } from "../pages/ConfirmationForgotPasswordPage";
 
 const MainRouter = () => {
   const { user, token, loginWithToken, loading } = useContext(authContext);
@@ -50,6 +51,10 @@ const MainRouter = () => {
         element={user ? <Navigate to="/" /> : <RegisterPage />}
       />
       <Route path="/forgot-password" element={<ForgotPasswordPage />} />
+      <Route
+        path="/confirmation-forgot-password"
+        element={<ConfirmationForgotPasswordPage />}
+      />
       <Route path="/reset-password" element={<ResetPasswordPage />} />
       <Route path="/new" element={<PostForm />} />
       <Route path="/posts/:id" element={<PostForm />} />
