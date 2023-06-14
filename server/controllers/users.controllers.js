@@ -1,4 +1,4 @@
-import { JWT_SECRET } from "../config.js";
+import { API_BASE_URL, JWT_SECRET } from "../config.js";
 import User from "../models/User.js";
 import { signJwt, resignJwt } from '../utils/jwtUtil.js';
 
@@ -109,7 +109,7 @@ export const forgotPassword = async (req, res) => {
             ...registeredUser._doc,
             token
         };
-        const resetLink = `http://localhost:3000/reset-password?token=${token}`;
+        const resetLink = `${API_BASE_URL}/reset-password?token=${token}`;
         await User.findByIdAndUpdate(registeredUser._id, updatedUser);
         await sendPasswordResetEmail(registeredUser.email, resetLink);
 
