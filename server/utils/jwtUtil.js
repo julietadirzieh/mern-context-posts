@@ -11,17 +11,8 @@ export const signJwt = (user) => {
     return token;
 };
 
-export const resignJwt = (user) => {
-    const token = jwt.sign({ id: user._id }, JWT_SECRET, {
-        expiresIn: "1h"
-    });
-    return token;
-};
-
-
 const jwtUtil = {
     signJwt,
-    resignJwt
 };
 
 export default jwtUtil;

@@ -67,10 +67,8 @@ const AuthProvider = ({ children }) => {
     try {
       const res = await forgotPasswordRequest(values);
 
-      if (res.message === "Password reset token sent to your email") {
-        toast.success("Password reset token sent to your email");
-        localStorage.setItem("token", res.user.token);
-        setToken(res.user.token);
+      if (res.message === "Password reset sent to your email") {
+        toast.success("Password reset sent to your email");
         return res;
       }
       toast.error(res.message);

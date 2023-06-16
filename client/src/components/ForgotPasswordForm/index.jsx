@@ -1,24 +1,24 @@
 import { Form, Formik } from "formik";
-import React, { useContext } from "react";
+import React, { useContext, useState } from "react";
 import { AiOutlineLoading3Quarters } from "react-icons/ai";
 import validationSchema from "./validation";
 import { toast } from "react-hot-toast";
 import InputForm from "../InputForm";
 import { authContext } from "../../context/authContext";
-import { useNavigate } from "react-router-dom";
+import ForgotPasswordStatus from "./ForgotPasswordStatus";
 
 const ForgotPasswordForm = () => {
   const { forgotPassword } = useContext(authContext);
-  const navigate = useNavigate();
+  const [showConfirmation, setShowConfirmation] = useState(false);
 
   const onSubmit = async (values) => {
     try {
       const response = await forgotPassword(values.email);
       if (
         response &&
-        response.message === "Password reset token sent to your email"
+        response.message === "Password reset sent to your email"
       ) {
-        navigate("/confirmation-forgot-password");
+        setShowConfirmation(true);
         return response;
       }
     } catch (err) {
@@ -26,7 +26,9 @@ const ForgotPasswordForm = () => {
     }
   };
 
-  return (
+  return showConfirmation ? (
+    <ForgotPasswordStatus />
+  ) : (
     <div className="bg-zinc-800 text-white py-12 w-5/6 md:w-2/3 mx-auto rounded-md shadow-md shadow-black items-center h-full">
       <h2 className="text-3xl text-white font-bold">Forgot your Password?</h2>
 

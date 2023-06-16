@@ -9,9 +9,6 @@ const ForgotPasswordStatus = () => (
     <h4 className="text-xl text-white font-bold mt-2">
       We have sent you a link to reset your password.
     </h4>
-    <h4 className="text-lg text-white font-bold mt-2">
-      The link is valid to use within 1 hour.
-    </h4>
   </div>
 );
 

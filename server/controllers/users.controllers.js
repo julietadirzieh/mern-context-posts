@@ -1,9 +1,7 @@
 import { API_BASE_URL, JWT_SECRET } from "../config.js";
 import User from "../models/User.js";
-import { signJwt, resignJwt } from '../utils/jwtUtil.js';
-
+import { signJwt } from '../utils/jwtUtil.js';
 import jwt from "jsonwebtoken";
-
 import { sendPasswordResetEmail } from "../utils/sendEmail.js";
 
 export const registerUser = async (req, res) => {
@@ -104,16 +102,11 @@ export const forgotPassword = async (req, res) => {
             })
         }
 
-        const token = resignJwt(registeredUser)
-        const updatedUser = {
-            ...registeredUser._doc,
-            token
-        };
-        const resetLink = `${API_BASE_URL}/reset-password?token=${token}`;
-        await User.findByIdAndUpdate(registeredUser._id, updatedUser);
+        const resetLink = `${API_BASE_URL}/reset-password?email=${registeredUser.email}`;
+
         await sendPasswordResetEmail(registeredUser.email, resetLink);
 
-        return res.json({ auth: true, message: "Password reset token sent to your email", user: updatedUser });
+        return res.json({ auth: true, message: "Password reset sent to your email", user: { ...registeredUser._doc } });
 
     } catch (error) {
         return res.status(500).json({ message: error.message });
@@ -122,11 +115,9 @@ export const forgotPassword = async (req, res) => {
 
 export const resetPassword = async (req, res) => {
     try {
-        const { token, password } = req.body;
+        const { email, password } = req.body;
 
-        const decoded = jwt.verify(token, JWT_SECRET);
-
-        const registeredUser = await User.findById(decoded.id, { password: 0 });
+        const registeredUser = await User.findOne({ email });
 
         if (!registeredUser) {
             return res.json({
@@ -140,12 +131,11 @@ export const resetPassword = async (req, res) => {
         const updatedUser = {
             ...registeredUser._doc,
             password: hashedNewPassword,
-            token: token
         };
 
         await User.findByIdAndUpdate(registeredUser._id, updatedUser);
 
-        return res.json({ message: "Password reset successful", user: { ...updatedUser, password: undefined } });
+        return res.json({ message: "Password reset successful" });
     } catch (error) {
         return res.status(500).json({ message: error.message });
     }

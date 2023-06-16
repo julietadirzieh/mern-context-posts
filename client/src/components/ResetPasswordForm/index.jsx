@@ -15,16 +15,15 @@ const ResetPasswordForm = () => {
   const onSubmit = async (values) => {
     try {
       const searchParams = new URLSearchParams(location.search);
-      const token = searchParams.get("token");
+      const email = searchParams.get("email");
       const body = {
-        token: token,
+        email: email,
         password: values.newPassword.toLowerCase(),
       };
 
       const response = await resetPassword(body);
 
       if (response && response.message === "Password reset successful") {
-        localStorage.removeItem("token");
         navigate("/login");
         return response;
       }
